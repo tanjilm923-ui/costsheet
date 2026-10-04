@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>COST SHEET</title>
+<style>
+:root{
+  --navy:#1e293b; --navy2:#0f172a; --gold:#2563eb; --gold2:#3b82f6;
+  --bg:#f1f5f9; --panel:#fff; --ink:#1e293b; --muted:#64748b;
+  --line:#e2e8f0; --good:#0ca678; --bad:#f03e3e;
+  --shadow:0 2px 8px rgba(15,23,42,.08),0 10px 30px rgba(15,23,42,.06); --radius:16px;
+  --pink:#2563eb; --teal:#0ca678; --blue:#1c7ed6; --orange:#f76707;
+}
+*{box-sizing:border-box} body{margin:0;font-family:"Segoe UI",Inter,system-ui,Arial,sans-serif;background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 45%,#e2e8f0 100%);background-attachment:fixed;color:var(--ink);font-size:13.5px}
+.app{display:grid;grid-template-columns:262px 1fr;min-height:100vh}
+.side{background:linear-gradient(180deg,#16294a,#0f1f3a 60%,#0a1526);color:#dbe4f0;padding:16px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;gap:10px;align-items:center;padding:4px 6px 14px;border-bottom:1px solid rgba(255,255,255,.15);margin-bottom:10px}
+.brand .logo{min-width:72px;height:56px;padding:4px 8px;border-radius:12px;font-size:15px;line-height:1.15;text-align:center;word-break:break-word;overflow:hidden;background:#8a6508;display:grid;place-items:center;font-weight:800;color:#ffffff;text-shadow:0 1px 3px rgba(0,0,0,.85);box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.brand b{font-size:15px;color:#fff;display:block}.brand span{font-size:11px;color:#94a3b8}
+.side h4{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;margin:14px 6px 8px}
+.styleItem{display:flex;gap:9px;align-items:center;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:600;font-size:12.5px;color:#f5f0ff;border:1px solid transparent;margin-bottom:4px;transition:all .15s}
+.styleItem:hover{background:rgba(255,255,255,.08)}
+.styleItem.active{background:rgba(37,99,235,.25);border-color:rgba(96,165,250,.6)}
+.styleItem img,.styleItem .noimg{width:30px;height:30px;border-radius:7px;object-fit:cover;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);flex:none}
+.side button{width:100%;text-align:left;background:rgba(255,255,255,.10);color:#f5f0ff;border:1px solid rgba(255,255,255,.14);padding:9px 11px;border-radius:9px;cursor:pointer;font-size:12.5px;margin-top:7px;transition:all .15s}
+.side button:hover{background:rgba(255,255,255,.2);transform:translateX(2px)}
+main{padding:20px 24px 60px;max-width:1350px;width:100%}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.topbar h1{margin:0;font-size:20px;color:#1e293b}.topbar .sub{color:var(--muted);font-size:12px;margin-top:3px}
+.btn{border:1px solid var(--line);background:#fff;padding:8px 13px;border-radius:9px;cursor:pointer;font-size:12.5px;font-weight:600;box-shadow:var(--shadow);transition:transform .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,#334155,#0f172a);color:#fff;border-color:transparent}
+.btn.gold{background:linear-gradient(135deg,#16294a,#0a1526);color:#fff;border-color:transparent}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:16px}
+.card h3{margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#334155;display:flex;align-items:center;gap:8px}
+.card h3 .dot{width:8px;height:8px;border-radius:3px;background:linear-gradient(135deg,#2563eb,#0f172a)}
+.hgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.field label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;background:#f8fafc;font-family:inherit;transition:border-color .15s,box-shadow .15s}
+.field input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.20);outline:none}
+.field.wide{grid-column:span 2}
+#bom td input.ref{border:1px solid var(--line);border-radius:6px}
+#bom td input.ref:hover,#bom td input.ref:focus{border-color:#cbd5e1;background:#f8fafc;outline:none}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#475569;text-align:right;padding:6px 8px;border-bottom:2px solid #e2e8f0;background:#f8fafc}
+th:first-child,td:first-child{text-align:left}
+td{padding:5px 8px;border-bottom:1px solid #f1f5f9;font-size:12.5px;text-align:right}
+td input{width:100%;border:1px solid transparent;background:transparent;text-align:right;font:inherit;padding:4px 6px;border-radius:6px}
+td input:hover,td input:focus,td textarea:hover,td textarea:focus{border-color:#cbd5e1;background:#f8fafc;outline:none}
+tr.sec td{background:#f1f5f9;font-weight:700;color:#334155;text-transform:uppercase;font-size:10.5px;letter-spacing:.1em;text-align:left}
+tr.total td{font-weight:700;border-top:2px solid #cbd5e1;background:#f8fafc;color:#1e293b}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;background:#f1f5f9;color:#334155;font-weight:600;font-size:11px}
+.imgs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px;max-width:560px}
+.slot{border:2px dashed #cbd5e1;border-radius:12px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:11px;cursor:pointer;background:#f8fafc;overflow:hidden;position:relative;text-align:center;padding:6px;transition:border-color .15s}
+.slot img{max-width:100%;max-height:130px;border-radius:6px}
+.slot:hover{border-color:var(--pink)}
+.slot .rm{position:absolute;top:4px;right:6px;background:rgba(15,23,42,.85);color:#fff;border:none;border-radius:6px;font-size:10px;padding:2px 6px;cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);border-top:4px solid #94a3b8}
+.kpi:nth-child(2){border-top-color:#2563eb}
+.kpi:nth-child(3){border-top-color:#0ca678}
+.kpi:nth-child(4){border-top-color:#64748b}
+.kpi .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.kpi .v{font-size:19px;font-weight:700;margin-top:4px;color:#1e293b}
+.kpi .s{font-size:11px;color:var(--muted);margin-top:2px}
+.kpi.hero{background:linear-gradient(135deg,#334155,#0f172a);color:#fff;border-top-color:#2563eb}
+.kpi.hero .l,.kpi.hero .s{color:#cbd5e1}.kpi.hero .v{color:#fff}
+.badge{font-size:11px;padding:3px 9px;border-radius:7px;background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;cursor:pointer}
+.badge:hover{background:#e2e8f0}
+.pos{color:var(--good)}.neg{color:var(--bad)}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+#summary{min-width:560px}#bom{min-width:760px}
+@media(max-width:1200px){.app{grid-template-columns:225px 1fr}.hgrid,.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1024px){.hgrid{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.card{padding:14px}}
+@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:static;height:auto;padding:12px 14px}.topbar h1{font-size:18px}
+  #styleList{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+  .styleItem{margin-bottom:0;flex:none}
+  .side button{margin-top:6px}
+  .brand{padding-bottom:10px}
+  main{padding:14px 14px 50px}
+  .topbar{flex-direction:column;align-items:stretch}
+  .topbar .printWrap{align-self:flex-end}}
+@media(max-width:640px){body{font-size:13px}main{padding:12px 12px 44px}.card{padding:12px;border-radius:12px}
+  .hgrid,.kpis{grid-template-columns:repeat(2,1fr)}.hgrid .field.wide{grid-column:span 2}
+  .kpi .v{font-size:16px}.topbar h1{font-size:16px}.imgs{grid-template-columns:1fr;max-width:100%}
+  th,td{padding:5px 6px;font-size:11.5px}.brand .logo{height:48px;min-width:56px}
+  td input{padding:4px 4px;font-size:11.5px}
+  #bom th:nth-child(5),#bom td:nth-child(5){display:none}
+  #bom{min-width:520px}
+  #summary{min-width:480px}
+  .slot{min-height:110px!important}
+  .topbar .sub{font-size:11px}}
+@media(max-width:430px){.hgrid,.kpis{grid-template-columns:1fr}.hgrid .field.wide{grid-column:span 1}.kpi .v{font-size:18px}
+  .topbar .printWrap{align-self:stretch}.topbar .printWrap .btn{width:100%}.printMenu{left:0;right:0;min-width:0}}
+.printWrap{position:relative;display:inline-block}
+.printMenu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);min-width:170px;overflow:hidden;display:none;z-index:50}
+.printMenu.open{display:block}
+.printMenu button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 14px;border:none;background:#fff;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink)}
+.printMenu button:hover{background:#f5f0ff}
+@media print{.side,.topbar .printWrap,#btnAddStyle,#btnCopyStyle,#btnDelStyle,#btnImport,#btnExport{display:none!important}main{padding:0}}
+</style>
+<script src="html2pdf.bundle.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo" id="brandLogo">Buyer</div><div><b id="brandTitle">COST SHEET</b><span id="brandSub" style="font-size:13px;font-weight:700;color:#94a3b8;letter-spacing:.04em"></span></div></div>
+    <h4>Styles</h4>
+    <div id="styleList"></div>
+    <button id="btnAddStyle">➕ Add New Style</button>
+    <button id="btnCopyStyle">⿻ Copy Current Style</button>
+    <button id="btnDelStyle">🗑 Remove Current Style</button>
+    <h4>Data</h4>
+    <button id="btnImport">⬆ Import XLSX (reload data)</button>
+    <button id="btnExport">⬇ Export current data (Excel)</button>
+    <input type="file" id="xlsxFile" accept=".xlsx,.xls,.xlsb,.csv" style="display:none">
+    <a href="https://www.linkedin.com/in/tanjel-mahamud/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;background:rgba(37,99,235,.25);border:1px solid rgba(96,165,250,.5);color:#dbeafe;text-decoration:none;padding:8px 12px;border-radius:10px;font-size:12.5px;font-weight:700;margin-top:14px;justify-content:center">🔗 Connect to fix the problems</a>
+  </aside>
+  <main>
+    <div class="topbar">
+      <div><h1 id="title">—</h1><div class="sub" id="subtitle">—</div></div>
+      <div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" onclick="document.getElementById('tpdf').click()">📄 Import Tech Pack PDF</button>
+          <input type="file" id="tpdf" accept=".pdf" style="display:none" onchange="importTechPack(this.files[0])">
+          <div class="printWrap">
+          <button class="btn gold" id="btnPrintMenu" onclick="togglePrintMenu(event)">🖨 Print ▾</button>
+          <div class="printMenu" id="printMenu">
+            <button onclick="doPrint()">🖨 Print</button>
+            <button onclick="savePdf()">💾 Save (Download PDF)</button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="card">
+      <h3><span class="dot"></span>Style Description</h3>
+      <div class="hgrid">
+        <div class="field"><label>Style No</label><input data-h="styleNo"></div>
+        <div class="field"><label>Season</label><input data-h="season"></div>
+        <div class="field"><label>Customer</label><input data-h="customer"></div>
+        <div class="field"><label>Fab Mill</label><input data-h="fabMill"></div>
+        <div class="field"><label>Fab Width</label><input data-h="fabWidth"></div>
+        <div class="field"><label>Order No</label><input data-h="orderNo"></div>
+        <div class="field wide"><label>Fabric Ref</label><input data-h="fabricRef"></div>
+        <div class="field wide"><label>Fabric Description</label><input data-h="fabricDesc"></div>
+        <div class="field"><label>Qty</label><input type="number" data-h="qty"></div>
+      </div>
+
+      <h3 style="margin-top:16px"><span class="dot"></span>Style Image</h3>
+      <div class="imgs" style="grid-template-columns:1fr">
+        <!-- Front/Back image slots removed -->
+      </div>
+      <div style="margin-top:14px;max-width:380px">
+        <div class="slot" id="slotLarge" onclick="pickImage('large')" style="min-height:220px">
+          <span>📷 Click, drag &amp; drop, or paste one image from clipboard (Ctrl+V)</span>
+          <input type="file" id="imgLarge" accept="image/*" style="display:none" onchange="setImage('large',this.files[0])">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>Cost Summary</h3>
+      <div class="tblwrap"><table id="summary"><tbody></tbody></table></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>Production Variables</h3>
+      <div class="hgrid">
+        <div class="field"><label>SMV (min)</label><input type="number" step="0.01" data-h="smv"></div>
+        <div class="field"><label>EPM</label><input type="number" step="0.01" data-h="epm"></div>
+        <div class="field"><label>Efficiency %</label><input type="number" step="1" data-h="efficiency"></div>
+        <div class="field"><label>Line Cost Rate</label><input type="number" step="0.001" data-h="lineCostRate"></div>
+        <div class="field"><label>Transport %</label><input type="number" step="0.001" data-h="transportPct" data-pct></div>
+        <div class="field"><label>Margin %</label><input type="number" step="0.001" data-h="marginPct" data-pct></div>
+        <div class="field"><label>Commission %</label><input type="number" step="0.001" data-h="commissionPct" data-pct></div>
+        <div class="field"><label>Mover / Merchant</label><input data-h="mover"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot"></span>BOM — Materials &amp; Trims <span class="badge" id="itemCount"></span></h3>
+      <div class="tblwrap"><table id="bom">
+        <thead><tr><th>Item</th><th>Ref</th><th>Unit</th><th>Unit Px</th><th>Rating</th><th>Waste %</th><th>Value</th><th>Budget</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="xlsx.full.min.js"></script>
+<script src="pdf.min.js"></script>
+<script src="costing_data.js"></script>
+<script>
+let STYLES = (window.COSTING_DATA || []).slice(0,2).map(s => ({season:'', customer:'', ...s, images: {front:null, back:null, large:null}}))
+  .map(s => ({...s, items: s.items.filter(it => !/ebmlishments/i.test(it.name || ''))}));
+let cur = 0;
+
+const $ = s => document.querySelector(s);
+const fmt = (n, d=2) => (+n||0).toLocaleString('en-US',{minimumFractionDigits:d, maximumFractionDigits:d});
+const pct = n => fmt((+n||0)*100, 2) + '%';
+
+const PACKING = ['hang tag','hangtag','swift tag','swift tack','main ht','additional ht','sticker','stickerrfid','tag','hanger','sizer','extra button bag','carton','poly','micro sheet','pvh tapes','packing','barrel','ckj label'];
+
+function togglePrintMenu(e){ e.stopPropagation(); document.getElementById('printMenu').classList.toggle('open'); }
+document.addEventListener('click', () => document.getElementById('printMenu').classList.remove('open'));
+function doPrint(){ document.getElementById('printMenu').classList.remove('open'); window.print(); }
+function savePdf(){
+  document.getElementById('printMenu').classList.remove('open');
+  const title = (document.getElementById('title').textContent || 'cost-sheet').replace(/[\\/:*?"<>|]+/g,'-').trim() || 'cost-sheet';
+  const el = document.querySelector('main');
+  if (window.html2pdf){
+    html2pdf().set({
+      margin: 8,
+      filename: title + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    }).from(el).save();
+  } else {
+    alert('PDF library failed to load. Please refresh the page and try again.');
+  }
+}
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
+
+async function importTechPack(file){
+  if(!file) return;
+  try{
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;
+    const parsed=[];
+    let isPvH=false;
+    for(let i=1;i<=Math.min(8,pdf.numPages);i++){
+      const tc=await (await pdf.getPage(i)).getTextContent();
+      if(/Style BOM|Material Sub Type|Placement Name/i.test(tc.items.map(t=>t.str).join(' '))){ isPvH=true; break; }
+    }
+    if(isPvH){ await parseTechPackPvH(pdf, parsed); }
+    else {
+    let tokens=[];
+    for(let i=1;i<=pdf.numPages;i++){const tc=await (await pdf.getPage(i)).getTextContent();tokens=tokens.concat(tc.items.map(t=>(t.str||'').trim()).filter(Boolean));}
+    const rows=[];let cur=[];
+    tokens.forEach(t=>{if(/^\d+\.\d{4}$/.test(t)){cur.push(t);rows.push(cur);cur=[];}else cur.push(t);});
+    rows.forEach(r=>{
+      let toks = r.slice(0,-1);
+      // strip everything up to and including the last colour-code group "( ... )"
+      let close = -1;
+      for (let i = toks.length - 1; i >= 0; i--) { if (toks[i].includes(')')) { close = i; break; } }
+      if (close >= 0) toks = toks.slice(close + 1);
+      if(!toks.length) return;
+      let mi=toks.findIndex((t,i)=>i<10 && !/\s/.test(t) && t.length<=24 && /[-\/]/.test(t) && /[A-Za-z]/.test(t) && /[0-9]/.test(t));
+      if(mi<0) mi=toks.findIndex((t,i)=>i<10 && !/\s/.test(t) && t.length<=24 && /[-\/]/.test(t));
+      if(mi<0) mi=toks.findIndex((t,i)=>i<10 && !/\s/.test(t) && t.length<=16 && /\d/.test(t) && /[A-Za-z]/.test(t));
+      let name = mi>0?toks.slice(0,mi).join(' '):'';
+      let ref = mi>=0?toks[mi]:'';
+      if(!name && ref) name=ref;
+      if(mi<0 && toks.length>=2 && toks[0].toUpperCase()===toks[1].toUpperCase()){ name=toks[0]; ref=toks[1]; }
+      name = name.replace(/-\s+/g,'-').replace(/\s+\([^)]*\)/g,'').trim();
+      const ri = name.lastIndexOf(')');
+      if(ri>0) name = name.slice(ri+1).trim();
+      if(name && !/^(copyright|printed|page|giii)/i.test(name) && !/pattern\s*(file)?/i.test(name)) parsed.push({name, ref, qty:parseFloat(r[r.length-1])});
+    });
+    }
+    // Look for wash/embroidery/print mentions anywhere in the tech pack and add them as embellishment items
+    let tpText='';
+    for(let i=1;i<=pdf.numPages;i++){const tc=await (await pdf.getPage(i)).getTextContent();tpText+=' '+tc.items.map(t=>t.str).join(' ');}
+    const tpWords = tpText.split(/\s+/).filter(Boolean);
+    function techDetail(patterns){
+      for(const pat of patterns){
+        const i = tpWords.findIndex(w => new RegExp(pat,'i').test(w));
+        if(i>=0){
+          return tpWords.slice(Math.max(0,i-8), Math.min(tpWords.length, i+6)).join(' ');
+        }
+      }
+      return '';
+    }
+    if(/\bwash\b/i.test(tpText)){
+      const det = techDetail(['enzyme','softener','reactive','bleach','sandblast','wash']);
+      parsed.push({name: det ? 'Wash - '+det.slice(0,70) : 'Wash', ref:'', section:'Embellishments', qty:NaN});
+    }
+    if(/\bembroider|embroidered|embroidery\b/i.test(tpText)){
+      const det = techDetail(['embroider','embroidery']);
+      parsed.push({name: det ? det.slice(0,70) : 'Embroidery', ref:'', section:'Embellishments', qty:NaN});
+    }
+    if(/\bprint(ing)?\b/i.test(tpText)){
+      const det = techDetail(['print','printing','screen']);
+      parsed.push({name: det ? det.slice(0,70) : 'Print', ref:'', section:'Embellishments', qty:NaN});
+    }
+    seatTechPack(parsed);
+  }catch(e){ alert('Could not read PDF: '+e.message); }
+}
+
+async function parseTechPackPvH(pdf, parsed){
+  let curSection='';
+  const seen={};
+  let cur=null;
+  const maxP=pdf.numPages;
+  for(let p=1;p<=maxP;p++){
+    const tc=await (await pdf.getPage(p)).getTextContent();
+    const ptxt=tc.items.map(t=>t.str).join(' ');
+    if(!/Style BOM|Placement Name|Description/i.test(ptxt)) continue;
+    const runs=tc.items.map(it=>({x:it.transform[4],y:it.transform[5],s:(it.str||'').trim()})).filter(r=>r.s);
+    const lines=[];
+    runs.forEach(r=>{let L=lines.find(l=>Math.abs(l.y-r.y)<2);if(!L){L={y:r.y,runs:[]};lines.push(L);}L.runs.push(r);});
+    lines.sort((a,b)=>b.y-a.y);
+    for(const l of lines){
+      const row=l.runs.sort((a,b)=>a.x-b.x);
+      // section header (e.g. "Fabric (2)" or "TRIMS") — small token at far left, no code present
+      const lowX=row.filter(r=>r.x>=15 && r.x<50);
+      const xQty=row.find(r=>r.x>=88 && r.x<=115);
+      const lowTxt=lowX.map(r=>r.s).join(' ').trim();
+      if(lowTxt && !xQty && /^([A-Za-z&\/ ]{2,20})(\s*\(\s*\d+\s*\))?$/.test(lowTxt) && /^(fabric|trims?|packings?|packing|notions?|accessories|miscellaneous|others?)$/i.test(lowTxt.replace(/\s*\(\d+\)$/,''))){
+        flush(); cur=null; curSection=lowTxt.replace(/\s*\(\d+\)$/,''); continue;
+      }
+      const codeRun=xQty && /^(?=.*\d)[A-Za-z0-9-]+$/.test(xQty.s) ? xQty : null;
+      // repeated table header rows end current item
+      if(row.some(r=>r.s==='Description') && row.some(r=>r.s==='Code') && row.some(r=>/Placement/.test(r.s))){ flush(); cur=null; continue; }
+      if(codeRun){
+        flush();
+        const placement=lowX.length?lowX[0].s:'';
+        cur={sec:curSection, placement, code:codeRun.s, desc:[]};
+        const ds=row.filter(r=>r.x>=130 && r.x<236);
+        if(ds.length) cur.desc.push(...ds.map(d=>d.s));
+        continue;
+      }
+      if(cur){
+        if(lowX.length && lowX[0].s!=='+' && /^[A-Z][A-Z -\/`'']*$/.test(lowX[0].s) && lowX[0].s.length>1){ flush(); cur=null; continue; }
+        const ds=row.filter(r=>r.x>=130 && r.x<236);
+        if(ds.length) cur.desc.push(...ds.map(d=>d.s));
+      }
+    }
+    flush(); cur=null;
+  }
+  function flush(){
+    if(!cur) return;
+    const name=cur.desc.join(' ').replace(/\s+/g,' ').trim();
+    const secStr=cur.sec||'';
+    let sec='';
+    if(/fabric/i.test(secStr)) sec='Fabric';
+    else if(/trim|pack|notion|access/i.test(secStr)) sec='Trims';
+    else if(/emb|wash|embroider|print/i.test(secStr)) sec='Embellishments';
+    if(name && !seen[cur.code]){ seen[cur.code]=1; if(!/pattern\s*(file)?/i.test(name)) parsed.push({name, ref:cur.code, section:sec, qty:NaN}); }
+    cur=null;
+  }
+}
+
+function seatTechPack(parsed){
+  const norm = s => (s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  const words = s => norm(s).split(' ').filter(w=>w.length>2);
+  let matched=0, added=0;
+  const items = STYLES[cur].items;
+  parsed.forEach(p=>{
+    const pw = words(p.name); if(!pw.length) return;
+    if(/pattern\s*(file)?/i.test(p.name)) return;
+    let best=null, bestScore=0;
+    items.forEach(it=>{
+      const iw = words(it.name); if(!iw.length) return;
+      const common = pw.filter(w=>iw.includes(w)).length;
+      const score = common/Math.max(pw.length,iw.length);
+      if(score>bestScore){bestScore=score;best=it;}
+    });
+    if(best && bestScore>=0.6){ if(p.ref) best.ref=p.ref; matched++; }
+    else {
+      const n = p.name.toLowerCase();
+      let section;
+      if (p.section === 'Fabric' || p.section === 'Trims' || p.section === 'Embellishments'){ section = p.section; }
+      else {
+        if(/wash|embroider|embroidery|screen print|enzyme|softener|reactive|print/.test(n)) section = 'Embellishments';
+        else if(/tropical|cotton|linen|wool|rayon|spandex|polyester|crepe|taffeta|twill|denim|jersey|lining|shell|fusing|interlining|fabric/.test(n)) section = 'Fabric';
+        else if(/button|zipper|rivet|tack|trim|tape|label|thread|cord|hangtag|hanger|sizer|patch|shank|bag|poly|carton|swift|mailbox/.test(n)) section = 'Trims';
+        else return; // skip items that are not fabric / trims / embellishments
+      }
+      items.push({name:p.name, ref:p.ref||'', size:'', unit:'', unitPx:0, rating:0, waste:0, section});
+      added++;
+    }
+  });
+  render();
+  alert(`Tech pack imported: ${matched} BOM item(s) updated, ${added} new item(s) added.`);
+}
+function isPack(it){ return it.section === 'Trims' && PACKING.some(p => (it.name||'').toLowerCase().includes(p)); }
+function sectionOf(it){
+  if (it.section === 'Fabric' || it.section === 'Sewing Trims' || it.section === 'Packing Trims' || it.section === 'Embellishments') return it.section;
+  const n = (it.name||'').toLowerCase();
+  if (it.section === 'Others') {
+    if (n.includes('wash') || n.includes('embroid') || n.includes('print') || n.includes('embr') || n.includes('embell') || n.includes('mblish')) return 'Embellishments';
+    return 'Others';
+  }
+  return isPack(it) ? 'Packing Trims' : 'Sewing Trims';
+}
+
+function calc(s){
+  const mat = {Fabric:0, 'Sewing Trims':0, 'Packing Trims':0, Embellishments:0, Others:0};
+  s.items.forEach(it => { it.value = it.unitPx*it.rating*(1+ (+it.waste||0)); mat[sectionOf(it)] += it.value; });
+  const matTotal = mat.Fabric + mat['Sewing Trims'] + mat['Packing Trims'] + mat.Embellishments + mat.Others;
+  const cm = s.smv * s.epm;
+  const base = matTotal + cm;
+  const fobw = base / (1 - s.transportPct - s.marginPct);
+  const transport = fobw * s.transportPct;
+  const margin = fobw * s.marginPct;
+  const commission = fobw * s.commissionPct;
+  const fob = fobw + commission;
+  const lineCost = s.smv * s.lineCostRate / (s.efficiency/100);
+  const profit = cm - lineCost;
+  return {mat, matTotal, cm, base, fobw, transport, margin, commission, fob, lineCost, profit};
+}
+
+function renderList(){
+  $('#styleList').innerHTML = STYLES.map((s,i)=>`
+    <div class="styleItem ${i===cur?'active':''}" onclick="select(${i})">
+      ${s.images.large || s.images.front ? `<img src="${s.images.large || s.images.front}">` : `<span class="noimg"></span>`}
+      <div>${s.styleNo}</div>
+    </div>`).join('');
+}
+function select(i){ cur = i; render(); }
+
+$('#btnAddStyle').onclick = () => {
+  const no = prompt('Enter new Style No:', 'NEW-STYLE');
+  if (!no) return;
+  STYLES.push({styleNo:no.trim(), season:'', customer:'', fabMill:'', fabricRef:'', fabricDesc:'', fabWidth:'', orderNo:'', mover:'', qty:3000, smv:0, epm:0.1, transportPct:0.015, marginPct:0.01, commissionPct:0, efficiency:60, lineCostRate:0, items:[], images:{front:null,back:null,large:null}});
+  cur = STYLES.length - 1; render();
+};
+$('#btnCopyStyle').onclick = () => {
+  const src = STYLES[cur];
+  const copy = JSON.parse(JSON.stringify(src, (k, v) => k === 'images' ? undefined : v));
+  copy.styleNo = prompt('Style No for the copy:', src.styleNo + '-COPY') || (src.styleNo + '-COPY');
+  copy.images = {front: src.images.front, back: src.images.back, large: src.images.large};
+  STYLES.push(copy);
+  cur = STYLES.length - 1; render();
+};
+$('#btnDelStyle').onclick = () => {
+  if (STYLES.length <= 1) { alert('At least one style is required.'); return; }
+  if (!confirm('Remove style "' + STYLES[cur].styleNo + '"?')) return;
+  STYLES.splice(cur, 1); if (cur >= STYLES.length) cur = STYLES.length - 1; render();
+};
+
+function render(){
+  const s = STYLES[cur], c = calc(s);
+  document.title = 'Cost Sheet';
+  $('#title').textContent = 'Style ' + s.styleNo;
+  const logo = $('#brandLogo');
+  $('#brandLogo').textContent = s.customer && s.customer.trim() ? s.customer : 'Buyer';
+  const ln = logo.textContent.length;
+  logo.style.fontSize = ln>10?'11px':(ln>6?'13px':'15px');
+  $('#brandSub').textContent = (s.season && s.season.trim()) ? s.season : '';
+  $('#subtitle').textContent = `${s.customer?s.customer+' · ':''}${s.fabricDesc} · Fabric Ref ${s.fabricRef} · Mill ${s.fabMill} · Width ${s.fabWidth}`;
+  renderList();
+
+  document.querySelectorAll('[data-h]').forEach(inp => {
+    const k = inp.dataset.h;
+    let v = (s[k] === undefined || s[k] === null) ? '' : s[k];
+    if (inp.dataset.pct !== undefined) v = (+v*100);
+    inp.value = v;
+  });
+
+  ['large'].forEach(side => {
+    const cap = side === 'front' ? 'Front' : side === 'back' ? 'Back' : 'Large';
+    const slot = $('#slot' + cap);
+    if (!slot) return;
+    const big = side === 'large';
+    if (s.images[side]) { slot.innerHTML = `<img src="${s.images[side]}"${big?' style="max-height:280px"':''}><button class="rm" onclick="event.stopPropagation();removeImage('${side}')">✕</button><input type="file" id="img${cap}" accept="image/*" style="display:none" onchange="setImage('${side}',this.files[0])">`; }
+    else { slot.innerHTML = `<span>${big?'📷 Click, drag & drop, or paste one image from clipboard (Ctrl+V)':'📷 Click to add '+side+' image'}</span><input type="file" id="img${cap}" accept="image/*" style="display:none" onchange="setImage('${side}',this.files[0])">`; }
+  });
+
+  $('#itemCount').textContent = s.items.length + ' items';
+  const tb = $('#bom tbody'); tb.innerHTML = '';
+  ['Fabric','Sewing Trims','Packing Trims','Embellishments','Others'].forEach(sec => {
+    const items = s.items.filter(it => sectionOf(it) === sec);
+    tb.insertAdjacentHTML('beforeend', `<tr class="sec"><td colspan="2">${sec}${sec==='Fabric'?' (Materials)':''}</td><td colspan="7" style="text-align:right"><button class="badge" onclick="addItem('${sec}')">+ Add ${sec} Item</button></td></tr>`);
+    items.forEach((it, idx) => {
+      const gi = s.items.indexOf(it);
+      tb.insertAdjacentHTML('beforeend', `<tr>
+        <td><textarea rows="1" style="width:100%;min-width:240px;border:1px solid transparent;background:transparent;font:inherit;padding:4px 6px;border-radius:6px;resize:vertical;text-align:left;white-space:normal" onchange="u(${gi},'name',this.value)" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'">${it.name}</textarea></td>
+        <td><input class="ref" value="${it.ref}" onchange="u(${gi},'ref',this.value)"></td>
+        <td><input value="${it.unit}" onchange="u(${gi},'unit',this.value)"></td>
+        <td><input type="number" step="0.01" value="${it.unitPx}" onchange="u(${gi},'unitPx',+this.value)"></td>
+        <td><input type="number" step="0.01" value="${it.rating}" onchange="u(${gi},'rating',+this.value)"></td>
+        <td><input type="number" step="0.01" value="${it.waste}" onchange="u(${gi},'waste',+this.value)"></td>
+        <td>${fmt(it.value,3)}</td>
+        <td>${fmt(it.value*s.qty)}</td>
+        <td><button class="badge" onclick="delItem(${gi})">✕</button></td>
+      </tr>`);
+    });
+    tb.insertAdjacentHTML('beforeend', `<tr class="total"><td colspan="6">Total ${sec}</td><td>${fmt(c.mat[sec],3)}</td><td>${fmt(c.mat[sec]*s.qty)}</td><td></td></tr>`);
+  });
+
+  $('#summary tbody').innerHTML = `
+    <tr><th colspan="2" style="text-align:left">Component</th><th>$ / pc</th><th>Budget (${s.qty} pcs)</th><th>% of FOB</th></tr>
+    <tr><td>Fabric</td><td></td><td>${fmt(c.mat.Fabric,3)}</td><td>${fmt(c.mat.Fabric*s.qty)}</td><td>${pct(c.mat.Fabric/c.fob)}</td></tr>
+    <tr><td>Sewing Trims</td><td></td><td>${fmt(c.mat['Sewing Trims'],3)}</td><td>${fmt(c.mat['Sewing Trims']*s.qty)}</td><td>${pct(c.mat['Sewing Trims']/c.fob)}</td></tr>
+    <tr><td>Packing Trims</td><td></td><td>${fmt(c.mat['Packing Trims'],3)}</td><td>${fmt(c.mat['Packing Trims']*s.qty)}</td><td>${pct(c.mat['Packing Trims']/c.fob)}</td></tr>
+    <tr><td>Embellishments (Wash/Embr/Print)</td><td></td><td>${fmt(c.mat.Embellishments,3)}</td><td>${fmt(c.mat.Embellishments*s.qty)}</td><td>${pct(c.mat.Embellishments/c.fob)}</td></tr>
+    <tr><td>Others (Test &amp; Courier/Freight)</td><td></td><td>${fmt(c.mat.Others,3)}</td><td>${fmt(c.mat.Others*s.qty)}</td><td>${pct(c.mat.Others/c.fob)}</td></tr>
+    <tr><td><b>Materials total</b></td><td></td><td><b>${fmt(c.matTotal,3)}</b></td><td><b>${fmt(c.matTotal*s.qty)}</b></td><td>${pct(c.matTotal/c.fob)}</td></tr>
+    <tr><td>CM (SMV ${s.smv} × EPM ${s.epm})</td><td></td><td>${fmt(c.cm,3)}</td><td>${fmt(c.cm*s.qty)}</td><td>${pct(c.cm/c.fob)}</td></tr>
+    <tr><td><b>FOB w/o Commission</b></td><td></td><td><b>${fmt(c.fobw,3)}</b></td><td><b>${fmt(c.fobw*s.qty)}</b></td><td>${pct(c.fobw/c.fob)}</td></tr>
+    <tr><td>↳ Transport (${pct(s.transportPct)})</td><td></td><td>${fmt(c.transport,3)}</td><td>${fmt(c.transport*s.qty)}</td><td>${pct(c.transport/c.fob)}</td></tr>
+    <tr><td>↳ Margin slippage (${pct(s.marginPct)})</td><td></td><td>${fmt(c.margin,3)}</td><td>${fmt(c.margin*s.qty)}</td><td>${pct(c.margin/c.fob)}</td></tr>
+    <tr><td>Commission (${pct(s.commissionPct)})</td><td></td><td>${fmt(c.commission,3)}</td><td>${fmt(c.commission*s.qty)}</td><td>${pct(c.commission/c.fob)}</td></tr>
+    <tr><td><b>FOB</b></td><td></td><td><b>${fmt(c.fob,3)}</b></td><td><b>${fmt(c.fob*s.qty)}</b></td><td>${pct(1)}</td></tr>
+    <tr><td>Line Cost (SMV×Rate/Eff)</td><td></td><td>${fmt(c.lineCost,3)}</td><td>${fmt(c.lineCost*s.qty)}</td><td>${pct(c.lineCost/c.fob)}</td></tr>
+    <tr><td><b>CM − Line Cost (Profit)</b></td><td></td><td class="${c.profit>=0?'pos':'neg'}"><b>${fmt(c.profit,3)}</b></td><td class="${c.profit>=0?'pos':'neg'}"><b>${fmt(c.profit*s.qty)}</b></td><td>${pct(c.profit/c.fob)}</td></tr>`;
+
+  $('#kpis').innerHTML = `
+    <div class="kpi hero"><div class="l">FOB / pc</div><div class="v">$${fmt(c.fob,2)}</div><div class="s">Total budget $${fmt(c.fob*s.qty)}</div></div>
+    <div class="kpi"><div class="l">SMV / EPM</div><div class="v">${fmt(s.smv,2)} <span style="font-size:12px;color:var(--muted)">min</span> / ${fmt(s.epm,2)}</div><div class="s">SAH ${fmt((s.smv * s.qty) / 60, 1)}</div></div>
+    <div class="kpi"><div class="l">CM / pc</div><div class="v">$${fmt(c.cm,2)}</div><div class="s">Line cost $${fmt(c.lineCost,2)}/pc</div></div>
+    <div class="kpi"><div class="l">Profit %</div><div class="v ${c.profit>=0?'pos':'neg'}">${fmt(c.profit/c.fob*100,2)}%</div><div class="s">CM − Line Cost $${fmt(c.profit,2)}/pc</div></div>`;
+}
+
+function u(i, k, v){ STYLES[cur].items[i][k] = v; render(); }
+function addItem(section){
+  let baseSection = section, isPacking = false;
+  if (section === 'Sewing Trims' || section === 'Packing Trims') baseSection = 'Trims';
+  if (section === 'Packing Trims') isPacking = true;
+  if (section === 'Embellishments' || section === 'Others') baseSection = 'Others';
+  const it = {name: section === 'Others' ? 'Others' : isPacking ? 'New Packing Trim' : section === 'Embellishments' ? 'Embellishments' : 'New Item', ref:'', unit:'Pcs', unitPx:0, rating:1, waste:0.02, section: baseSection};
+  STYLES[cur].items.push(it); render();
+}
+function delItem(i){ STYLES[cur].items.splice(i,1); render(); }
+
+// header binds
+document.querySelectorAll('[data-h]').forEach(inp => {
+  inp.addEventListener('change', () => {
+    const k = inp.dataset.h; let v = inp.value;
+    if (inp.type === 'number') v = +v;
+    if (inp.dataset.pct !== undefined) v = (+inp.value)/100;
+    STYLES[cur][k] = v; render();
+  });
+});
+
+// style images
+function pickImage(side){ document.getElementById('img'+(side==='front'?'Front':side==='back'?'Back':'Large')).click(); }
+function setImage(side, file){ if(!file) return; const r = new FileReader(); r.onload = e => { STYLES[cur].images[side] = e.target.result; render(); }; r.readAsDataURL(file); }
+function removeImage(side){ STYLES[cur].images[side] = null; render(); }
+// drag & drop on slots
+['large'].forEach(side => {
+  const cap = side==='front'?'Front':side==='back'?'Back':'Large';
+  const slot = document.getElementById('slot' + cap);
+  if (!slot) return;
+  slot.addEventListener('dragover', e => { e.preventDefault(); slot.style.borderColor = 'var(--gold)'; });
+  slot.addEventListener('dragleave', () => slot.style.borderColor = '');
+  slot.addEventListener('drop', e => { e.preventDefault(); slot.style.borderColor=''; const f = e.dataTransfer.files[0]; if (f) setImage(side, f); });
+});
+
+// ---- browser-side parser (mirror of extract_data.js) ----
+function numB(v){const n=parseFloat(v);return isFinite(n)?n:0}
+function strB(v){return v===undefined||v===null?'':String(v).trim()}
+function parseSheetB(ws){
+  const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+  const rec={styleNo:'',season:'',customer:'',fabMill:'',fabricRef:'',fabricDesc:'',fabWidth:'',orderNo:'',mover:'',qty:0,smv:0,epm:0.1,transportPct:0,marginPct:0,commissionPct:0,efficiency:60,lineCostRate:0,items:[]};
+  const labelMap={'Fab Mill:':'fabMill','Fabric Ref:':'fabricRef','Fabric Description:':'fabricDesc','Fab Width:':'fabWidth','Style NO:':'styleNo','Order No: ':'orderNo','Order No:':'orderNo'};
+  rows.forEach((r,i)=>r.forEach((cell,j)=>{
+    const t=strB(cell);
+    if(labelMap[t]!==undefined){for(let k=j+1;k<Math.min(j+4,r.length);k++)if(r[k]!==''){rec[labelMap[t]]=r[k];break}}
+    if(t==='Qty'){for(let k=j+1;k<Math.min(j+3,r.length);k++)if(r[k]!==''){rec.qty=numB(r[k]);break}}
+    if(t==='Transport'){for(let k=j+1;k<Math.min(j+3,r.length);k++)if(typeof r[k]==='number'){rec.transportPct=numB(r[k]);break}}
+    if(t==='Margin Slippage'){for(let k=j+1;k<Math.min(j+3,r.length);k++)if(typeof r[k]==='number'){rec.marginPct=numB(r[k]);break}}
+    if(t==='Commision'||t==='Commission'){for(let k=j+1;k<Math.min(j+3,r.length);k++)if(typeof r[k]==='number'){rec.commissionPct=numB(r[k]);break}}
+    if(t==='Efficiency'){for(let k=j+1;k<Math.min(j+3,r.length);k++)if(typeof r[k]==='number'){rec.efficiency=numB(r[k]);break}}
+    if(t==='Line cost'||t==='Line Cost rate'){for(let k=j+1;k<Math.min(j+3,r.length);k++)if(typeof r[k]==='number'){rec.lineCostRate=0;break}}
+    if(t==='SMV'){const below=rows[i+1];if(below)for(let k=j;k<below.length;k++)if(typeof below[k]==='number'&&below[k]>0){rec.smv=numB(below[k]);break}}
+    if(t==='EPM'){const below=rows[i+1];if(below)for(let k=j;k<below.length;k++)if(typeof below[k]==='number'&&below[k]>0&&below[k]<=10){rec.epm=numB(below[k]);break}}
+  }));
+  const findL=(l)=>rows.findIndex(r=>strB(r[1])===l);
+  const headerR=findL('Item'), subTotR=findL('SUB TOTAL');
+  const stopR=subTotR>0?subTotR:rows.length;
+  let section='Fabric';
+  for(let i=headerR+1;i<stopR;i++){
+    const r=rows[i],name=strB(r[1]);
+    if(name==='TTL fabric Cost'){section='Trims';continue}
+    if(name==='TTL Trims Cost'){section='Others';continue}
+    if(!name)continue;
+    if(['CM','SUB TOTAL','Transport','Margin Slippage'].includes(name))continue;
+    rec.items.push({name,ref:strB(r[2]),size:strB(r[3]),unit:strB(r[4]),unitPx:numB(r[5]),rating:numB(r[6]),waste:numB(r[7]),section});
+  }
+  return rec;
+}
+
+// ---- Benetione W23 BOM format parser ----
+function isBenetioneSheet(ws){
+  const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+  for(let i=0;i<Math.min(40,rows.length);i++){
+    for(let j=0;j<rows[i].length;j++){
+      const t=String(rows[i][j]);
+      if(t.includes('Bills of Materials') || t.trim()==='Fabrics Description' || t.trim()==='S/L No') return true;
+    }
+  }
+  return false;
+}
+function parseSheetBenetione(ws){
+  const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+  const rec={styleNo:'',season:'',customer:'',fabMill:'',fabricRef:'',fabricDesc:'',fabWidth:'',orderNo:'',mover:'',qty:0,smv:0,epm:0.1,transportPct:0,marginPct:0,commissionPct:0,efficiency:60,lineCostRate:0,items:[]};
+  const S=v=>v===undefined||v===null?'':String(v).trim();
+  const N=v=>{const n=parseFloat(v);return isFinite(n)?n:0};
+  const findLabel=(label)=>{for(let r=0;r<rows.length;r++)for(let c=0;c<rows[r].length;c++)if(S(rows[r][c])===label)return{r,c};return null;};
+  const rightVal=(loc)=>{for(let c=loc.c+1;c<Math.min(loc.c+5,rows[loc.r].length);c++){const v=rows[loc.r][c];if(v!==''&&v!==undefined)return v;}return '';};
+  let l;
+  if(l=findLabel('Style no'))rec.styleNo=S(rightVal(l)).replace(/\s+/g,' ').trim();
+  if(l=findLabel('Buyer'))rec.customer=S(rightVal(l));
+  if(l=findLabel('Order No'))rec.orderNo=S(rightVal(l));
+  if(l=findLabel('Bulk Order QTY'))rec.qty=N(rightVal(l));
+  if(l=findLabel('Commission'))rec.commissionPct=N(rightVal(l));
+  if(l=findLabel('Profit Margin %'))rec.marginPct=N(rightVal(l));
+  if(l=findLabel('SMV/ Pc'))rec.smv=N(rightVal(l));
+  if(l=findLabel('CPM with 100% Eff'))rec.epm=N(rightVal(l))||rec.epm;
+  if(l=findLabel('Product Eff%'))rec.efficiency=N(rightVal(l))*100;
+  if(l=findLabel('BDT to USD Rate')){/* informational */}
+  // composition line (first long fabric desc near col 16, row 1)
+  if(rows[1] && S(rows[1][16])) rec.fabricDesc=S(rows[1][16]);
+
+  // ---- item tables ----
+  let section='';
+  const secMap={'Fabrics Description':'Fabric','Accessories':'Trims','Item Name':'Packing','Testing':'Others'};
+  for(let i=0;i<rows.length;i++){
+    const r=rows[i], name=S(r[1]);
+    if(name==='Total Cost / DZ'){ section=''; continue; }
+    // header rows have the section title in col 1 and "Total Cost" label (string) in col 10
+    if(secMap[name]!==undefined && typeof r[10]!=='number'){ section=secMap[name]; continue; }
+    if(!section) continue;
+    if(!name) continue;
+    if(name==='S/L No') continue;
+    let sec;
+    if(section==='Fabric') sec='Fabric';
+    else if(section==='Packing') sec='Packing Trims';
+    else if(section==='Others') sec='Others';
+    else {
+      if(/wash|embroid|print|screen|aop|crocking|pilling|shrink/i.test(name)) sec='Embellishments';
+      else sec='Sewing Trims';
+    }
+    const required=N(r[3]), excess=N(r[4]);
+    let consumptionDz=N(r[5]);
+    const price=N(r[7]);
+    const totalCost=N(r[10]);
+    let rating;
+    if(required>0) rating = required/12;
+    else if(price>0 && totalCost>0) rating=(totalCost/price)/12;
+    else if(consumptionDz>0) rating=consumptionDz/12/(1+excess);
+    else rating = price>0?1:0;
+    const unitPx = price>0?price:(rating>0?totalCost/12/rating:totalCost/12);
+    rec.items.push({name,ref:S(r[9])||S(r[0]),size:'',unit:S(r[8]),unitPx,rating,waste:excess,section:sec});
+  }
+  return rec;
+}
+
+document.addEventListener('paste', e => {
+  const items = (e.clipboardData || window.clipboardData).items;
+  for (let it of items) {
+    if (it.type.indexOf('image/') === 0) {
+      const f = it.getAsFile();
+      if (f) setImage('large', f);
+      e.preventDefault();
+      break;
+    }
+  }
+});
+
+// import / export
+$('#btnImport').onclick = () => $('#xlsxFile').click();
+
+$('#xlsxFile').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const buf = await f.arrayBuffer();
+  const wb = XLSX.read(buf, {type:'array'});
+  const sheets = wb.SheetNames;
+  const benetione = sheets.some(n => isBenetioneSheet(wb.Sheets[n]));
+  let parsed;
+  if (benetione) {
+    parsed = sheets.map((n,i) => { const p = parseSheetBenetione(wb.Sheets[n]); if(!p.styleNo) p.styleNo = n.trim(); return p; }).filter(p => p.styleNo || p.items.length);
+  } else {
+    parsed = sheets.map(n => parseSheetB(wb.Sheets[n])).filter(p => p.styleNo || p.items.length);
+  }
+  if(!parsed.length){alert('No costing-style sheets found in this file.');return}
+  STYLES = parsed.map(p => ({...p, images:{front:null,back:null,large:null}}))
+    .map(p => ({...p, items: p.items.filter(it => !/ebmlishments/i.test(it.name || ''))}));
+  cur = 0; render();
+  alert('Loaded ' + STYLES.length + ' styles: ' + STYLES.map(s=>s.styleNo).join(', '));
+};
+$('#btnExport').onclick = () => {
+  // Export current STYLES as an Excel workbook (one sheet per style)
+  const wb = XLSX.utils.book_new();
+  STYLES.forEach((s, idx) => {
+    const c = calc(s);
+    const aoa = [];
+    aoa.push(['Style NO:', s.styleNo, '', 'Fab Mill:', s.fabMill, '', 'Qty:', s.qty]);
+    aoa.push(['Season:', s.season || '', '', 'Customer:', s.customer || '', '', 'Order No:', s.orderNo]);
+    aoa.push(['Fab Width:', s.fabWidth, '', 'Fabric Ref:', s.fabricRef, '', '', '']);
+    aoa.push(['Fabric Description:', s.fabricDesc]);
+    aoa.push([]);
+    aoa.push(['Production Variables']);
+    aoa.push(['SMV', s.smv, 'EPM', s.epm, 'Efficiency %', s.efficiency, 'Line Cost Rate', s.lineCostRate]);
+    aoa.push(['Transport %', s.transportPct, 'Margin %', s.marginPct, 'Commission %', s.commissionPct]);
+    aoa.push([]);
+    aoa.push(['Item', 'Ref', 'Unit', 'Unit Px', 'Rating', 'Waste', 'Value', 'Budget (Qty)', 'Section']);
+    ['Fabric','Sewing Trims','Packing Trims','Embellishments','Others'].forEach(sec => {
+      s.items.filter(it => sectionOf(it) === sec).forEach(it => {
+        aoa.push([it.name, it.ref, it.unit, it.unitPx, it.rating, it.waste, it.unitPx*it.rating*(1+(+it.waste||0)), it.unitPx*it.rating*(1+(+it.waste||0))*s.qty, sectionOf(it)]);
+      });
+    });
+    aoa.push([]);
+    aoa.push(['COST SUMMARY', '', '$ / pc', '', 'Budget (Qty)']);
+    aoa.push(['Fabric', '', c.mat.Fabric, '', c.mat.Fabric * s.qty]);
+    aoa.push(['Sewing Trims', '', c.mat['Sewing Trims'], '', c.mat['Sewing Trims'] * s.qty]);
+    aoa.push(['Packing Trims', '', c.mat['Packing Trims'], '', c.mat['Packing Trims'] * s.qty]);
+    aoa.push(['Embellishments', '', c.mat.Embellishments, '', c.mat.Embellishments * s.qty]);
+    aoa.push(['Others (Test & Courier)', '', c.mat.Others, '', c.mat.Others * s.qty]);
+    aoa.push(['Materials Total', '', c.matTotal, '', c.matTotal * s.qty]);
+    aoa.push(['CM (SMV x EPM)', '', c.cm, '', c.cm * s.qty]);
+    aoa.push(['FOB w/o Commission', '', c.fobw, '', c.fobw * s.qty]);
+    aoa.push(['Transport', '', c.transport, '', c.transport * s.qty]);
+    aoa.push(['Margin Slippage', '', c.margin, '', c.margin * s.qty]);
+    aoa.push(['Commission', '', c.commission, '', c.commission * s.qty]);
+    aoa.push(['FOB', '', c.fob, '', c.fob * s.qty]);
+    aoa.push(['Line Cost', '', c.lineCost, '', c.lineCost * s.qty]);
+    aoa.push(['CM - Line Cost (Profit)', '', c.profit, '', c.profit * s.qty]);
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = [{wch:34},{wch:16},{wch:12},{wch:16},{wch:14},{wch:10},{wch:14},{wch:16},{wch:10}];
+    XLSX.utils.book_append_sheet(wb, ws, (s.styleNo || ('Style'+(idx+1))).slice(0,31));
+  });
+  XLSX.writeFile(wb, 'GIII_Costing_Export.xlsx');
+};
+
+render();
+</script>
+</body>
+</html>
