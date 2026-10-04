@@ -122,7 +122,8 @@ tr.total td{font-weight:700;border-top:2px solid #cbd5e1;background:#f8fafc;colo
       <div><h1 id="title">—</h1><div class="sub" id="subtitle">—</div></div>
       <div>
         <div style="display:flex;gap:8px">
-          <button class="btn" onclick="document.getElementById('tpdf').click()">📄 Import Tech Pack PDF</button>
+          <button class="btn gold" onclick="document.getElementById('tpdf').click()">📄 Import TP</button>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px;">Import pdf ▶ to load BOM items in below. Exclude the items that are irrelevent.</p>
           <input type="file" id="tpdf" accept=".pdf" style="display:none" onchange="importTechPack(this.files[0])">
           <div class="printWrap">
           <button class="btn gold" id="btnPrintMenu" onclick="togglePrintMenu(event)">🖨 Print ▾</button>
